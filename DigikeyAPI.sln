@@ -7,6 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiClient", "ApiClient\ApiC
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C112684B-A797-444D-81BB-94EACBFC4A01}"
 	ProjectSection(SolutionItems) = preProject
+		apiclient TEMPLATE.config = apiclient TEMPLATE.config
 		apiclient.config = apiclient.config
 	EndProjectSection
 EndProject
