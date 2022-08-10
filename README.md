@@ -32,7 +32,9 @@ In VS Developer PowerShell as Administrator :
 ## 3. Fill in apiclient.config
  ClientID and ClientSecret are both from your Digikey application
  
- Redirect URI is the EXACT same one as speicifed in your digikey application
+ Redirect URI must be the same domain and be https, as the one specified in your digikey application apart from what is.
+ e.g. I used "https://localhost:36220/OAuth2/" for redirecting and "https://localhost" as the callback URL for the app.
+ But it's best to have the exact same ones
  
  Listen URI is the one used to listen the callback and must be the same as the one specified in the step 2
  
