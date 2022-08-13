@@ -29,6 +29,12 @@ namespace ApiClient.Models
         public string RefreshToken { get; set; }
         public DateTime ExpirationDateTime { get; set; }
 
+        private static ApiClientSettings _instance = CreateFromConfigFile();
+        public static ApiClientSettings GetInstance()
+        {
+            return _instance;
+        }
+
         public void Save()
         {
             var t = ApiClientConfigHelper.Instance();
@@ -42,7 +48,7 @@ namespace ApiClient.Models
             t.Save();
         }
 
-        public static ApiClientSettings CreateFromConfigFile()
+        private static ApiClientSettings CreateFromConfigFile()
         {
             var t = ApiClientConfigHelper.Instance();
             return new ApiClientSettings()

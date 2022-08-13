@@ -130,10 +130,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ApiClientWrapper\ApiClientWrapper.csproj">
-      <Project>{d1a537e0-bb52-495a-bf5b-16e09a64e44b}</Project>
-      <Name>ApiClientWrapper</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ApiClient\ApiClient.csproj">
       <Project>{698ff1d6-2f24-4fb6-ae59-047f567d97ba}</Project>
       <Name>ApiClient</Name>

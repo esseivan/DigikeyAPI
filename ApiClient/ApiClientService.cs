@@ -61,16 +61,15 @@ namespace ApiClient
 
             HttpClient.DefaultRequestHeaders.Add("X-Digikey-Client-Id", ClientSettings.ClientId);
             HttpClient.DefaultRequestHeaders.Add("X-DIGIKEY-Locale-Site", "CH");
-            HttpClient.DefaultRequestHeaders.Add("X-DIGIKEY-Locale-Language", "fr");
+            HttpClient.DefaultRequestHeaders.Add("X-DIGIKEY-Locale-Language", "en");
             HttpClient.DefaultRequestHeaders.Add("X-DIGIKEY-Locale-Currency", "CHF");
-            HttpClient.DefaultRequestHeaders.Add("X-DIGIKEY-Locale-ShipToCountry", "CH");
             HttpClient.BaseAddress = DigiKeyUriConstants.BaseAddress;
             HttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
         public async Task ResetExpiredAccessTokenIfNeeded()
         {
-            if (_clientSettings.ExpirationDateTime < DateTime.Now)
+            if (_clientSettings.ExpirationDateTime < DateTime.Now && _clientSettings.RefreshToken != null)
             {
                 // Let's refresh the token
                 var oAuth2Service = new OAuth2Service(_clientSettings);

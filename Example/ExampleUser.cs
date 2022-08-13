@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Windows.Forms;
+using ApiClient;
 using ApiClient.Models;
 using ESNLib.Tools;
 
@@ -17,7 +18,7 @@ namespace Example
 {
     public partial class ExampleUser : Form, ESNLib.Tools.WinForms.AdminTools.IAdminForm
     {
-        private readonly ApiClientWrapper.ApiClientWrapper client = new ApiClientWrapper.ApiClientWrapper();
+        private readonly ApiClientWrapper client = new ApiClientWrapper();
 
         public ExampleUser()
         {
@@ -34,7 +35,7 @@ namespace Example
             SetState(false);
             if (await client.GetAccessToken()) // Begin Token recuperation
             {
-                var settings = ApiClientSettings.CreateFromConfigFile();
+                var settings = ApiClientSettings.GetInstance();
                 MessageBox.Show(string.Format("Authorization successfull !\nRefresh Token : {0}\nAccess Token : {1}\nExpiration : {2}",
                     settings.RefreshToken,
                     settings.AccessToken,

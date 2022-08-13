@@ -13,8 +13,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example", "Example\Example.csproj", "{3CB19CE2-0A1D-4202-B8CC-95A498F0B8A5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiClientWrapper", "ApiClientWrapper\ApiClientWrapper.csproj", "{D1A537E0-BB52-495A-BF5B-16E09A64E44B}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,10 +27,6 @@ Global
 		{3CB19CE2-0A1D-4202-B8CC-95A498F0B8A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3CB19CE2-0A1D-4202-B8CC-95A498F0B8A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3CB19CE2-0A1D-4202-B8CC-95A498F0B8A5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D1A537E0-BB52-495A-BF5B-16E09A64E44B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D1A537E0-BB52-495A-BF5B-16E09A64E44B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D1A537E0-BB52-495A-BF5B-16E09A64E44B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D1A537E0-BB52-495A-BF5B-16E09A64E44B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

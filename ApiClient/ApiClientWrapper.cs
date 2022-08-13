@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace ApiClientWrapper
+namespace ApiClient
 {
     public class ApiClientWrapper
     {
@@ -26,7 +26,7 @@ namespace ApiClientWrapper
         public async Task<bool> GetAccessToken()
         {
             // read clientSettings values from apiclient.config
-            var _clientSettings = ApiClientSettings.CreateFromConfigFile();
+            var _clientSettings = ApiClientSettings.GetInstance();
             Write(_clientSettings.ToString());
 
             // start up a HttpListener for the callback(RedirectUri) from the OAuth2 server
@@ -115,7 +115,7 @@ namespace ApiClientWrapper
         {
             Write("Refreshing...");
             // read clientSettings values from apiclient.config
-            var _clientSettings = ApiClientSettings.CreateFromConfigFile();
+            var _clientSettings = ApiClientSettings.GetInstance();
             Write(_clientSettings.ToString());
 
             // Initialize our OAuth2 service
@@ -141,7 +141,7 @@ namespace ApiClientWrapper
         /// </summary>
         public bool RegisterListener()
         {
-            var _clientSettings = ApiClientSettings.CreateFromConfigFile();
+            var _clientSettings = ApiClientSettings.GetInstance();
 
             Write("Checking admin privileges");
 
@@ -194,7 +194,7 @@ namespace ApiClientWrapper
         /// </summary>
         public bool UnregisterListener()
         {
-            var _clientSettings = ApiClientSettings.CreateFromConfigFile();
+            var _clientSettings = ApiClientSettings.GetInstance();
 
             bool hasPrivileges = MiscTools.HasAdminPrivileges();
             if (!hasPrivileges)
