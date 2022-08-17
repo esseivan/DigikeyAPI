@@ -79,6 +79,8 @@ namespace ApiClient.OAuth2
         {
             ServicePointManager.ServerCertificateValidationCallback =
                 delegate { return true; };
+            ServicePointManager.Expect100Continue = true;
+            ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
 
             // Build up the body for the token request
             var body = new List<KeyValuePair<string, string>>
