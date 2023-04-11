@@ -6,13 +6,14 @@ Requirements for getting tokens :
 
 In VS Developer PowerShell as Administrator :
 
- $ makecert cert_name.cer -a sha1 -n “CN=<your_cert_name>” -sr LocalMachine -ss My -sky signature -pe -len 2048
+ ```$ New-SelfSignedCertificate -KeyExportPolicy Exportable -CertStoreLocation "Cert:\LocalMachine\My" -KeySpec Signature -KeyLength 2048 -KeyAlgorithm RSA -Subject "<your_cert_name>"```
 
- To find Certhassh, do Win+R => mmc => Ctrl + M => Certificates => Computer Account => Personnal => Select yours => Details => Scroll down to Thumbprint
+ This command also output the certhash (thumbprint) in the command output. Otherwise with those steps :
+ To find Certhash, do Win+R => mmc => Ctrl + M => Certificates => Computer Account ; In the list : Personnal => Select your certificate => Details => Scroll down to Thumbprint
  
- $ netsh http add sslcert ipport=0.0.0.0:<your_port> certhash=<your_certhash> appid='{<your_appid>}'
+ ```$ netsh http add sslcert ipport=0.0.0.0:<your_port> certhash=<your_certhash> appid='{<your_appid>}'```
  
- The port I used is 36220
+ The port I used is ```36220```
  
  Note that there is no requirements on the appid other than to be a valid GUID and is only used for you to identify the sslcert
  
@@ -23,9 +24,9 @@ In VS Developer PowerShell as Administrator :
  
  In the cmd prompt in admin  run : 
  
- $ netsh http add urlacl url="<your_listening_url>" user=everyone
+ ```$ netsh http add urlacl url="<your_listening_url>" user=everyone```
  
- An example for the listening url is "https:\\+:36220\OAuth2\"
+ An example for the listening url is ```https:\\+:36220\OAuth2\```
  
  This url MUST be the same as the callback one set in your digikey API application
  
@@ -33,7 +34,7 @@ In VS Developer PowerShell as Administrator :
  ClientID and ClientSecret are both from your Digikey application
  
  Redirect URI must be the same domain and be https, as the one specified in your digikey application apart from what is.
- e.g. I used "https://localhost:36220/OAuth2/" for redirecting and "https://localhost" as the callback URL for the app.
+ e.g. I used ```https://localhost:36220/OAuth2/``` for redirecting and ```https://localhost``` as the callback URL for the app.
  But it's best to have the exact same ones
  
  Listen URI is the one used to listen the callback and must be the same as the one specified in the step 2
