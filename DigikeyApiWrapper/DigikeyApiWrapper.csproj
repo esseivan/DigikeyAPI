@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	<TargetFramework>net472</TargetFramework>
+	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+	<Authors>ESN</Authors>
+	<Description>Digikey API usage wrapper</Description>
+	<RepositoryUrl>https://github.com/esseivan/DigikeyAPI</RepositoryUrl>
+	<RepositoryType>git</RepositoryType>
+	<PackageTags>esn</PackageTags>
+	<PackageLicenseExpression>GPL-3.0-only</PackageLicenseExpression>
+	<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+	<Version>1.0.1</Version>
+	<SignAssembly>False</SignAssembly>
+	<PackageReleaseNotes></PackageReleaseNotes>
+	<PackageId>DigikeyApiWrapper</PackageId>
+	<Title>Digikey API Wrapper</Title>
+	<IncludeSymbols>True</IncludeSymbols>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ESNLib.Tools" Version="1.0.7.6" />
+    <PackageReference Include="System.Text.Json" Version="7.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ApiClient\ApiClient.csproj" />
+  </ItemGroup>
+
+</Project>

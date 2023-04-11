@@ -32,14 +32,14 @@
             this.btnRegister = new System.Windows.Forms.Button();
             this.btnUnregister = new System.Windows.Forms.Button();
             this.btnRefresh = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnAuth
             // 
-            this.btnAuth.Location = new System.Drawing.Point(12, 12);
+            this.btnAuth.Location = new System.Drawing.Point(18, 18);
+            this.btnAuth.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnAuth.Name = "btnAuth";
-            this.btnAuth.Size = new System.Drawing.Size(75, 23);
+            this.btnAuth.Size = new System.Drawing.Size(112, 35);
             this.btnAuth.TabIndex = 0;
             this.btnAuth.Text = "Authorize";
             this.btnAuth.UseVisualStyleBackColor = true;
@@ -47,9 +47,10 @@
             // 
             // btnRegister
             // 
-            this.btnRegister.Location = new System.Drawing.Point(632, 415);
+            this.btnRegister.Location = new System.Drawing.Point(948, 638);
+            this.btnRegister.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnRegister.Name = "btnRegister";
-            this.btnRegister.Size = new System.Drawing.Size(75, 23);
+            this.btnRegister.Size = new System.Drawing.Size(112, 35);
             this.btnRegister.TabIndex = 1;
             this.btnRegister.Text = "Register";
             this.btnRegister.UseVisualStyleBackColor = true;
@@ -57,9 +58,10 @@
             // 
             // btnUnregister
             // 
-            this.btnUnregister.Location = new System.Drawing.Point(713, 415);
+            this.btnUnregister.Location = new System.Drawing.Point(1070, 638);
+            this.btnUnregister.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnUnregister.Name = "btnUnregister";
-            this.btnUnregister.Size = new System.Drawing.Size(75, 23);
+            this.btnUnregister.Size = new System.Drawing.Size(112, 35);
             this.btnUnregister.TabIndex = 2;
             this.btnUnregister.Text = "Unregister";
             this.btnUnregister.UseVisualStyleBackColor = true;
@@ -67,35 +69,26 @@
             // 
             // btnRefresh
             // 
-            this.btnRefresh.Location = new System.Drawing.Point(12, 41);
+            this.btnRefresh.Location = new System.Drawing.Point(18, 63);
+            this.btnRefresh.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnRefresh.Name = "btnRefresh";
-            this.btnRefresh.Size = new System.Drawing.Size(75, 23);
+            this.btnRefresh.Size = new System.Drawing.Size(112, 35);
             this.btnRefresh.TabIndex = 3;
             this.btnRefresh.Text = "Refresh";
             this.btnRefresh.UseVisualStyleBackColor = true;
             this.btnRefresh.Click += new System.EventHandler(this.button1_Click_1);
             // 
-            // button1
+            // ExampleUser
             // 
-            this.button1.Location = new System.Drawing.Point(93, 12);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 4;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click_2);
-            // 
-            // Form1
-            // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.button1);
+            this.ClientSize = new System.Drawing.Size(1200, 692);
             this.Controls.Add(this.btnRefresh);
             this.Controls.Add(this.btnUnregister);
             this.Controls.Add(this.btnRegister);
             this.Controls.Add(this.btnAuth);
-            this.Name = "Form1";
+            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.Name = "ExampleUser";
             this.Text = "Form1";
             this.ResumeLayout(false);
 
@@ -107,7 +100,6 @@
         private System.Windows.Forms.Button btnRegister;
         private System.Windows.Forms.Button btnUnregister;
         private System.Windows.Forms.Button btnRefresh;
-        private System.Windows.Forms.Button button1;
     }
 }
 

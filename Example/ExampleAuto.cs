@@ -98,10 +98,10 @@ namespace Example
         private async void ProductDetails()
         {
             //var response = await service.KeywordSearch("P5555-ND");
-            //var response = await service.ProductDetails(textBox1.Text);
+            var response = await service.ProductDetails(textBox1.Text);
             // Simulate search result :
 
-            string response = File.ReadAllText(@"C:\Workspace\01_Programming\DigikeyAPI\Example\bin\Debug\simulate.json");
+            //string response = File.ReadAllText(@"C:\Workspace\01_Programming\DigikeyAPI\Example\bin\Debug\simulate.json");
             richTextBox1.Text = response;
             // Compress
             var compressed = Zip(response);
