@@ -31,7 +31,7 @@ namespace ApiClient
 
             // start up a HttpListener for the callback(RedirectUri) from the OAuth2 server
             HttpListenerContext context;
-            ApiClient.OAuth2.OAuth2Service oAuth2Service;
+            OAuth2.OAuth2Service oAuth2Service;
             using (var httpListener = new HttpListener())
             {
                 httpListener.Prefixes.Add(_clientSettings.ListenUri);

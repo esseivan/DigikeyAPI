@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <PackageReference Include="ESNLib.Tools" Version="1.0.7.6" />
+    <PackageReference Include="ESNLib.Tools.WinForms" Version="1.0.7.6" />
     <PackageReference Include="System.Text.Json" Version="7.0.2" />
   </ItemGroup>
 
