@@ -136,6 +136,10 @@
       <Project>{698ff1d6-2f24-4fb6-ae59-047f567d97ba}</Project>
       <Name>ApiClient</Name>
     </ProjectReference>
+    <ProjectReference Include="..\DigikeyApiWrapper\DigikeyApiWrapper.csproj">
+      <Project>{75559F33-9E49-42C0-B56F-793A125095A7}</Project>
+      <Name>DigikeyApiWrapper</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

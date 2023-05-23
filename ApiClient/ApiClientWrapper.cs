@@ -14,10 +14,39 @@ namespace ApiClient
 {
     public class ApiClientWrapper
     {
-
         private void Write(string text, Logger.LogLevels logLevel = Logger.LogLevels.Debug)
         {
             Logger.Instance.Write($"[ApiClientWrapper] {text}", logLevel);
+        }
+
+        public async Task<AccessResult> GetAccess()
+        {
+            var setting = ApiClientSettings.GetInstance();
+            bool isExpired = (setting.ExpirationDateTime < DateTime.Now)
+                || (setting.RefreshToken == null);
+
+            // Refresh token still valid. Nothing to do
+            if (!isExpired)
+            {
+                return new AccessResult(true);
+            }
+
+            // No valid token, try refreshing
+            var success = await RefreshAccessToken();
+            if (success)
+            {
+                return new AccessResult(true, new ApiClientService(ApiClientSettings.GetInstance()));
+            }
+
+            // No refresh made. Get access and refresh token...
+            success = await GetAccessToken();
+            if (success)
+            {
+                return new AccessResult(true, new ApiClientService(ApiClientSettings.GetInstance()));
+            }
+
+            // Unable to retrieve access token. Return false
+            return new AccessResult(false);
         }
 
         /// <summary>
@@ -27,7 +56,6 @@ namespace ApiClient
         {
             // read clientSettings values from apiclient.config
             var _clientSettings = ApiClientSettings.GetInstance();
-            Write(_clientSettings.ToString());
 
             // start up a HttpListener for the callback(RedirectUri) from the OAuth2 server
             HttpListenerContext context;
@@ -116,7 +144,6 @@ namespace ApiClient
             Write("Refreshing...");
             // read clientSettings values from apiclient.config
             var _clientSettings = ApiClientSettings.GetInstance();
-            Write(_clientSettings.ToString());
 
             // Initialize our OAuth2 service
             var oAuth2Service = new ApiClient.OAuth2.OAuth2Service(_clientSettings);
@@ -238,6 +265,25 @@ namespace ApiClient
 
                 return res;
             }
+        }
+
+        /// <summary>
+        /// Result of the GetAccess function
+        /// </summary>
+        public class AccessResult
+        {
+            public AccessResult(bool success)
+            {
+                Success = success;
+            }
+
+            public AccessResult(bool success, ApiClientService newService) : this(success)
+            {
+                NewService = newService;
+            }
+
+            public bool Success { get; set; }
+            public ApiClientService NewService { get; set; } = null;
         }
     }
 }

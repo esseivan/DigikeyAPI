@@ -1,5 +1,6 @@
 ﻿using ApiClient;
 using ApiClient.Models;
+using DigikeyApiWrapper;
 using ESNLib.Tools;
 using ESNLib.Tools.WinForms;
 using System;
@@ -24,7 +25,13 @@ namespace Example
         public ExampleAuto()
         {
             InitializeComponent();
-            Logger.Instance.Write(ApiClientSettings.GetInstance().ToString());
+            Logger.Instance.Write("Application idle...");
+
+#if DEBUG
+            Process.Start(Logger.Instance.FileOutputPath);
+            //Logger.Instance.Write(ApiClientSettings.GetInstance().ToString());
+#endif
+
             GetAccess();
         }
 
@@ -40,8 +47,6 @@ namespace Example
                 var setting = ApiClientSettings.GetInstance();
                 lblToken.Text = "Available";
                 lblToken.BackColor = Color.LightGreen;
-
-                Logger.Instance.Write(setting.ToString());
             }
             else
             {
@@ -53,41 +58,39 @@ namespace Example
 
         private async void GetAccess()
         {
-            var setting = ApiClientSettings.GetInstance();
-            if (setting.ExpirationDateTime < DateTime.Now && setting.RefreshToken != null)
-            {
-                var client = new ApiClientWrapper();
-                if (!await client.RefreshAccessToken())
-                {
-                    // Refresh not working
-                    if (!await client.GetAccessToken())
-                    {
-                        if (!MiscTools.HasAdminPrivileges())
-                            AdminTools.RunAsAdmin(this);
-                        else
-                        {
-                            SetLabel(false);
-                            var result = ESNLib.Controls.Dialog.ShowDialog(new ESNLib.Controls.Dialog.DialogConfig("Unable to get access token... Check the config and the logs", "Error")
-                            {
-                                Button1 = ESNLib.Controls.Dialog.ButtonType.Ignore,
-                                Button2 = ESNLib.Controls.Dialog.ButtonType.Custom1,
-                                CustomButton1Text = "Open log",
-                                Icon = ESNLib.Controls.Dialog.DialogIcon.Error,
-                            });
-                            if (result.DialogResult == ESNLib.Controls.Dialog.DialogResult.Custom1)
-                                Process.Start(Logger.Instance.FileOutputPath);
-                        }
-                    }
-                    else
-                        SetLabel(true);
-                }
-                else
-                    SetLabel(true);
+            var client = new ApiClientWrapper();
+            var result = await client.GetAccess();
 
-                service = new ApiClientService(ApiClientSettings.GetInstance());
+            if(result.Success)
+            {
+                SetLabel(true);
+                if (result.NewService != null)
+                {
+                    service = result.NewService;
+                }
             }
             else
-                SetLabel(true);
+            {
+                if (!MiscTools.HasAdminPrivileges())
+                {
+                    AdminTools.RunAsAdmin(this);
+                }
+                else
+                {
+                    SetLabel(false);
+                    var res = ESNLib.Controls.Dialog.ShowDialog(new ESNLib.Controls.Dialog.DialogConfig("Unable to get access token... Check the config and the logs", "Error")
+                    {
+                        Button1 = ESNLib.Controls.Dialog.ButtonType.Ignore,
+                        Button2 = ESNLib.Controls.Dialog.ButtonType.Custom1,
+                        CustomButton1Text = "Open log",
+                        Icon = ESNLib.Controls.Dialog.DialogIcon.Error,
+                    });
+                    if (res.DialogResult == ESNLib.Controls.Dialog.DialogResult.Custom1)
+                    {
+                        Process.Start(Logger.Instance.FileOutputPath);
+                    }
+                }
+            }
         }
 
         private void btnSearch_Click(object sender, EventArgs e)
@@ -97,11 +100,8 @@ namespace Example
 
         private async void ProductDetails()
         {
-            //var response = await service.KeywordSearch("P5555-ND");
-            
-            // MPN, SPN, description, category, pricing. Maybe add obsolete, productStatus, PrimaryPhoto, QuantityAvailable, MinimumOrderQuantity
-            // Category seems to give nothing ?
-            var response = await service.ProductDetails(textBox1.Text, "ManufacturerPartNumber,DigiKeyPartNumber,DetailedDescription,StandardPricing");
+            PartSearch ps = new PartSearch();
+            string response = await ps.ProductDetails_Essentials(textBox1.Text);
 
             // Simulate search result :
             //string response = File.ReadAllText(@"C:\Workspace\01_Programming\DigikeyAPI\Example\bin\Debug\simulate.json");
