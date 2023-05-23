@@ -39,9 +39,20 @@ namespace DigikeyApiWrapper
         {
             // MPN, SPN, description, category, pricing. Maybe add obsolete, productStatus, PrimaryPhoto, QuantityAvailable, MinimumOrderQuantity
             // Category seems to give nothing ?
-            string response = await service.ProductDetails(MPN, "ManufacturerPartNumber,DigiKeyPartNumber,DetailedDescription,StandardPricing[1]");
+            string response = await service.ProductDetails(MPN, "ManufacturerPartNumber,DigiKeyPartNumber,Manufacturer,DetailedDescription,StandardPricing[1]");
 
             return response;
+        }
+
+        /// <summary>
+        /// Deserialize the received json
+        /// </summary>
+        public static DigikeyPart DeserializeProductDetails(string json)
+        {
+            if (string.IsNullOrEmpty(json))
+                return null;
+            
+            return System.Text.Json.JsonSerializer.Deserialize<DigikeyPart>(json);
         }
     }
 }

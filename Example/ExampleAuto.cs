@@ -61,7 +61,7 @@ namespace Example
             var client = new ApiClientWrapper();
             var result = await client.GetAccess();
 
-            if(result.Success)
+            if (result.Success)
             {
                 SetLabel(true);
                 if (result.NewService != null)
@@ -149,7 +149,11 @@ namespace Example
 
         private void button1_Click(object sender, EventArgs e)
         {
-            richTextBox1.Text = Unzip(File.ReadAllBytes("compressed.json"));
+            richTextBox1.Text = @"{""StandardPricing"":[{""BreakQuantity"":1,""UnitPrice"":0.86,""TotalPrice"":0.86}],""DetailedDescription"":""1000µF 35V Aluminum Electrolytic Capacitors Radial, Can  2000 Hrs @ 105°C"",""ManufacturerPartNumber"":""ECA-1VHG102"",""DigiKeyPartNumber"":""P5555-ND"",""Manufacturer"":{""ParameterId"":-1,""ValueId"":""10"",""Parameter"":""Manufacturer"",""Value"":""Panasonic Electronic Components""}}";
+
+
+            DigikeyPart myPart = PartSearch.DeserializeProductDetails(richTextBox1.Text);
         }
+
     }
 }
