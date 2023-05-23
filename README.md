@@ -1,5 +1,5 @@
 # DigikeyAPI
-Digikey API usage
+Digikey API usage. Based on original API https://github.com/JackMBurch/ApiClient.V3.Core (MIT licensed)
 
 Requirements for getting tokens :
 ## 1. SSL Certificate
