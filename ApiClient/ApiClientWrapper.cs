@@ -28,7 +28,7 @@ namespace ApiClient
             bool isExpired = (setting.ExpirationDateTime < DateTime.Now)
                 || (setting.RefreshToken == null);
 
-            return isExpired;
+            return !isExpired;
         }
 
         public async Task<AccessResult> GetAccess()
