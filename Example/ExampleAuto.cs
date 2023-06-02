@@ -101,7 +101,8 @@ namespace Example
         private async void ProductDetails()
         {
             PartSearch ps = new PartSearch();
-            string response = await ps.ProductDetails_Essentials(textBox1.Text);
+            //string response = await ps.ProductDetails_Essentials(textBox1.Text);
+            string response = await service.ProductDetails(textBox1.Text);
 
             // Simulate search result :
             //string response = File.ReadAllText(@"C:\Workspace\01_Programming\DigikeyAPI\Example\bin\Debug\simulate.json");

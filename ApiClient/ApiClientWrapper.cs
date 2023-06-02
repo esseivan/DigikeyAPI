@@ -19,6 +19,18 @@ namespace ApiClient
             Logger.Instance.Write($"[ApiClientWrapper] {text}", logLevel);
         }
 
+        /// <summary>
+        /// Indicate if the token is currently available
+        /// </summary>
+        public bool HaveAccess()
+        {
+            var setting = ApiClientSettings.GetInstance();
+            bool isExpired = (setting.ExpirationDateTime < DateTime.Now)
+                || (setting.RefreshToken == null);
+
+            return isExpired;
+        }
+
         public async Task<AccessResult> GetAccess()
         {
             var setting = ApiClientSettings.GetInstance();
