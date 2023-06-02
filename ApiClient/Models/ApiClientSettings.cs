@@ -71,6 +71,9 @@ namespace ApiClient.Models
             Save();
         }
 
+        /// <summary>
+        /// Clear token informations. Only AccessToken, RefreshToken, ExpirationDateTime are cleared
+        /// </summary>
         public void ClearAndSave()
         {
             AccessToken = null;

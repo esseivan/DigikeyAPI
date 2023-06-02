@@ -14,6 +14,11 @@ namespace ApiClient
 {
     public class ApiClientWrapper
     {
+        /// <summary>
+        /// How long to wait for the response from the api access request. Default is 30s
+        /// </summary>
+        public int TimeoutSeconds { get; set; } = 30;
+
         private void Write(string text, Logger.LogLevels logLevel = Logger.LogLevels.Debug)
         {
             Logger.Instance.Write($"[ApiClientWrapper] {text}", logLevel);
@@ -42,16 +47,27 @@ namespace ApiClient
             {
                 return new AccessResult(true);
             }
-
             // No valid token, try refreshing
-            var success = await RefreshAccessToken();
+            var taskResult = RefreshAccessToken();
+            if (await Task.WhenAny(taskResult, Task.Delay(TimeoutSeconds)) != taskResult)
+            {
+                // timeout logic
+                return null;
+            }
+            var success = taskResult.Result;
             if (success)
             {
                 return new AccessResult(true, new ApiClientService(ApiClientSettings.GetInstance()));
             }
 
             // No refresh made. Get access and refresh token...
-            success = await GetAccessToken();
+            taskResult = GetAccessToken();
+            if (await Task.WhenAny(taskResult, Task.Delay(TimeoutSeconds)) != taskResult)
+            {
+                // timeout
+                return null;
+            }
+            success = taskResult.Result;
             if (success)
             {
                 return new AccessResult(true, new ApiClientService(ApiClientSettings.GetInstance()));
@@ -158,7 +174,7 @@ namespace ApiClient
             var _clientSettings = ApiClientSettings.GetInstance();
 
             // Initialize our OAuth2 service
-            var oAuth2Service = new ApiClient.OAuth2.OAuth2Service(_clientSettings);
+            var oAuth2Service = new OAuth2.OAuth2Service(_clientSettings);
             var result = await oAuth2Service.RefreshTokenAsync();
 
             // Check if you got an error during finishing the OAuth2 authorization

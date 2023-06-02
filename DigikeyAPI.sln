@@ -13,7 +13,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example", "Example\Example.csproj", "{3CB19CE2-0A1D-4202-B8CC-95A498F0B8A5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DigikeyApiWrapper", "DigikeyApiWrapper\DigikeyApiWrapper.csproj", "{75559F33-9E49-42C0-B56F-793A125095A7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DigikeyApiWrapper", "DigikeyApiWrapper\DigikeyApiWrapper.csproj", "{75559F33-9E49-42C0-B56F-793A125095A7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiClientTests", "ApiClientTests\ApiClientTests.csproj", "{440C16CE-05C6-4930-911B-ADFF6AD72C61}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{75559F33-9E49-42C0-B56F-793A125095A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{75559F33-9E49-42C0-B56F-793A125095A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{75559F33-9E49-42C0-B56F-793A125095A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{440C16CE-05C6-4930-911B-ADFF6AD72C61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{440C16CE-05C6-4930-911B-ADFF6AD72C61}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{440C16CE-05C6-4930-911B-ADFF6AD72C61}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{440C16CE-05C6-4930-911B-ADFF6AD72C61}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
