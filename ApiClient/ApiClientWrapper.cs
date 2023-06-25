@@ -30,8 +30,8 @@ namespace ApiClient
         public bool HaveAccess()
         {
             var setting = ApiClientSettings.GetInstance();
-            bool isExpired = (setting.ExpirationDateTime < DateTime.Now)
-                || (setting.RefreshToken == null);
+            bool isExpired =
+                (setting.ExpirationDateTime < DateTime.Now) || (setting.RefreshToken == null);
 
             return !isExpired;
         }
@@ -39,8 +39,8 @@ namespace ApiClient
         public async Task<AccessResult> GetAccess()
         {
             var setting = ApiClientSettings.GetInstance();
-            bool isExpired = (setting.ExpirationDateTime < DateTime.Now)
-                || (setting.RefreshToken == null);
+            bool isExpired =
+                (setting.ExpirationDateTime < DateTime.Now) || (setting.RefreshToken == null);
 
             // Refresh token still valid. Nothing to do
             if (!isExpired)
@@ -52,12 +52,15 @@ namespace ApiClient
             if (await Task.WhenAny(taskResult, Task.Delay(TimeoutSeconds)) != taskResult)
             {
                 // timeout logic
-                return null;
+                return new AccessResult(false);
             }
             var success = taskResult.Result;
             if (success)
             {
-                return new AccessResult(true, new ApiClientService(ApiClientSettings.GetInstance()));
+                return new AccessResult(
+                    true,
+                    new ApiClientService(ApiClientSettings.GetInstance())
+                );
             }
 
             // No refresh made. Get access and refresh token...
@@ -70,7 +73,10 @@ namespace ApiClient
             success = taskResult.Result;
             if (success)
             {
-                return new AccessResult(true, new ApiClientService(ApiClientSettings.GetInstance()));
+                return new AccessResult(
+                    true,
+                    new ApiClientService(ApiClientSettings.GetInstance())
+                );
             }
 
             // Unable to retrieve access token. Return false
@@ -84,6 +90,18 @@ namespace ApiClient
         {
             // read clientSettings values from apiclient.config
             var _clientSettings = ApiClientSettings.GetInstance();
+
+            // Validate URL
+            bool isValid =
+                Uri.TryCreate(_clientSettings.ListenUri, UriKind.Absolute, out Uri uriResult)
+                && (
+                    uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps
+                );
+            if (!isValid)
+            {
+                Write("Listen URI invalid...", Logger.LogLevels.Error);
+                return false;
+            }
 
             // start up a HttpListener for the callback(RedirectUri) from the OAuth2 server
             HttpListenerContext context;
@@ -116,7 +134,8 @@ namespace ApiClient
                 var response = context.Response;
 
                 // Send a response to the user
-                string responseString = "<html><body><h1>Authorization completed !</h1><h2>You may close this window</h2></html>";
+                string responseString =
+                    "<html><body><h1>Authorization completed !</h1><h2>You may close this window</h2></html>";
                 byte[] buffer = Encoding.UTF8.GetBytes(responseString);
                 response.ContentLength64 = buffer.Length;
                 response.ContentType = "text/html";
@@ -151,8 +170,14 @@ namespace ApiClient
             // Check if you got an error during finishing the OAuth2 authorization
             if (result.IsError)
             {
-                Write(string.Format("\n\nError            : {0}", result.Error), Logger.LogLevels.Error);
-                Write(string.Format("\n\nError.Description: {0}", result.ErrorDescription), Logger.LogLevels.Error);
+                Write(
+                    string.Format("\n\nError            : {0}", result.Error),
+                    Logger.LogLevels.Error
+                );
+                Write(
+                    string.Format("\n\nError.Description: {0}", result.ErrorDescription),
+                    Logger.LogLevels.Error
+                );
 
                 return false;
             }
@@ -215,11 +240,14 @@ namespace ApiClient
                 {
                     WindowStyle = ProcessWindowStyle.Hidden,
                     FileName = "cmd.exe",
-                    Arguments = $"/C netsh http add urlacl url=\"{_clientSettings.ListenUri}\" user=everyone",
+                    Arguments =
+                        $"/C netsh http add urlacl url=\"{_clientSettings.ListenUri}\" user=everyone",
                     Verb = "runas",
                     UseShellExecute = false
                 };
-                Write(string.Format("Running : \"{0} {1}\"", startInfo.FileName, startInfo.Arguments));
+                Write(
+                    string.Format("Running : \"{0} {1}\"", startInfo.FileName, startInfo.Arguments)
+                );
                 proc.StartInfo = startInfo;
                 startInfo.RedirectStandardOutput = true;
                 proc.Start();
@@ -270,7 +298,9 @@ namespace ApiClient
                     Verb = "runas",
                     UseShellExecute = false
                 };
-                Write(string.Format("Running : \"{0} {1}\"", startInfo.FileName, startInfo.Arguments));
+                Write(
+                    string.Format("Running : \"{0} {1}\"", startInfo.FileName, startInfo.Arguments)
+                );
                 proc.StartInfo = startInfo;
                 startInfo.RedirectStandardOutput = true;
                 proc.Start();
@@ -305,7 +335,8 @@ namespace ApiClient
                 Success = success;
             }
 
-            public AccessResult(bool success, ApiClientService newService) : this(success)
+            public AccessResult(bool success, ApiClientService newService)
+                : this(success)
             {
                 NewService = newService;
             }
