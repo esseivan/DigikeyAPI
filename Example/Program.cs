@@ -16,7 +16,11 @@ namespace Example
         {
             // Enable logger
             var log = ESNLib.Tools.Logger.Instance;
-            log.FilePath = ESNLib.Tools.Logger.GetDefaultLogPath("ESN", "ApiClientWrapper", "log.txt");
+            log.FilePath = ESNLib.Tools.Logger.GetDefaultLogPath(
+                "ESN",
+                "ApiClientWrapper",
+                "log.txt"
+            );
             log.Enable();
 
             // Sandbox mode API

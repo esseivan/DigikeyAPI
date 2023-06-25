@@ -36,16 +36,26 @@ namespace Example
             if (await client.GetAccessToken()) // Begin Token recuperation
             {
                 var settings = ApiClientSettings.GetInstance();
-                MessageBox.Show(string.Format("Authorization successfull !\nRefresh Token : {0}\nAccess Token : {1}\nExpiration : {2}",
-                    settings.RefreshToken,
-                    settings.AccessToken,
-                    settings.ExpirationDateTime),
-                    "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(
+                    string.Format(
+                        "Authorization successfull !\nRefresh Token : {0}\nAccess Token : {1}\nExpiration : {2}",
+                        settings.RefreshToken,
+                        settings.AccessToken,
+                        settings.ExpirationDateTime
+                    ),
+                    "Information",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information
+                );
             }
             else
             {
-                MessageBox.Show("Unable to complete authorization. Check the logs",
-                    "Information", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    "Unable to complete authorization. Check the logs",
+                    "Information",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
             }
             SetState(true);
         }
@@ -55,13 +65,21 @@ namespace Example
             SetState(false);
             if (await client.RefreshAccessToken())
             {
-                MessageBox.Show("Refresh successfull !",
-                    "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(
+                    "Refresh successfull !",
+                    "Information",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information
+                );
             }
             else
             {
-                MessageBox.Show("Unable to refresh",
-                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    "Unable to refresh",
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
             }
             SetState(true);
         }
@@ -81,13 +99,28 @@ namespace Example
             if (MiscTools.HasAdminPrivileges())
             {
                 if (client.RegisterListener())
-                    MessageBox.Show("Registration successfull", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(
+                        "Registration successfull",
+                        "Success",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information
+                    );
                 else
-                    MessageBox.Show("Failed\nIt may be already registered\nOtherwise you can manually register using \"netsh http add urlacl ...\"", "Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    MessageBox.Show(
+                        "Failed\nIt may be already registered\nOtherwise you can manually register using \"netsh http add urlacl ...\"",
+                        "Failed",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Exclamation
+                    );
             }
             else
             {
-                MessageBox.Show("Admin privileges required. The app will restart and you will have to click the button again.", "Admin required", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(
+                    "Admin privileges required. The app will restart and you will have to click the button again.",
+                    "Admin required",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
+                );
                 try
                 {
                     ESNLib.Tools.WinForms.AdminTools.RunAsAdmin(this);
@@ -105,13 +138,28 @@ namespace Example
             if (MiscTools.HasAdminPrivileges())
             {
                 if (client.UnregisterListener())
-                    MessageBox.Show("Unregistration successfull", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(
+                        "Unregistration successfull",
+                        "Success",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information
+                    );
                 else
-                    MessageBox.Show("Failed\nIt may be already unregistered\nOtherwise you can manually register using \"netsh http delete urlacl ...\"", "Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    MessageBox.Show(
+                        "Failed\nIt may be already unregistered\nOtherwise you can manually register using \"netsh http delete urlacl ...\"",
+                        "Failed",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Exclamation
+                    );
             }
             else
             {
-                MessageBox.Show("Admin privileges required. The app will restart and you will have to click the button again.", "Admin required", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(
+                    "Admin privileges required. The app will restart and you will have to click the button again.",
+                    "Admin required",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
+                );
                 try
                 {
                     ESNLib.Tools.WinForms.AdminTools.RunAsAdmin(this);

@@ -20,11 +20,7 @@ namespace DigikeyApiWrapper
         public string DigikeyPartNumber;
         public int Quantity;
 
-        public BomPart()
-        {
-
-        }
-
+        public BomPart() { }
     }
 
     public class BomResponse

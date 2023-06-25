@@ -1,14 +1,14 @@
 //-----------------------------------------------------------------------
 //
-// THE SOFTWARE IS PROVIDED "AS IS" WITHOUT ANY WARRANTIES OF ANY KIND, EXPRESS, IMPLIED, STATUTORY, 
-// OR OTHERWISE. EXPECT TO THE EXTENT PROHIBITED BY APPLICABLE LAW, DIGI-KEY DISCLAIMS ALL WARRANTIES, 
-// INCLUDING, WITHOUT LIMITATION, ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, 
-// SATISFACTORY QUALITY, TITLE, NON-INFRINGEMENT, QUIET ENJOYMENT, 
-// AND WARRANTIES ARISING OUT OF ANY COURSE OF DEALING OR USAGE OF TRADE. 
-// 
-// DIGI-KEY DOES NOT WARRANT THAT THE SOFTWARE WILL FUNCTION AS DESCRIBED, 
+// THE SOFTWARE IS PROVIDED "AS IS" WITHOUT ANY WARRANTIES OF ANY KIND, EXPRESS, IMPLIED, STATUTORY,
+// OR OTHERWISE. EXPECT TO THE EXTENT PROHIBITED BY APPLICABLE LAW, DIGI-KEY DISCLAIMS ALL WARRANTIES,
+// INCLUDING, WITHOUT LIMITATION, ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE,
+// SATISFACTORY QUALITY, TITLE, NON-INFRINGEMENT, QUIET ENJOYMENT,
+// AND WARRANTIES ARISING OUT OF ANY COURSE OF DEALING OR USAGE OF TRADE.
+//
+// DIGI-KEY DOES NOT WARRANT THAT THE SOFTWARE WILL FUNCTION AS DESCRIBED,
 // WILL BE UNINTERRUPTED OR ERROR-FREE, OR FREE OF HARMFUL COMPONENTS.
-// 
+//
 //-----------------------------------------------------------------------
 
 using System;
@@ -26,7 +26,7 @@ using Newtonsoft.Json;
 namespace ApiClient.OAuth2
 {
     /// <summary>
-    /// OAuth2Service accepts ApiClientSettings to use to initialize and finish an OAuth2 Authorization and 
+    /// OAuth2Service accepts ApiClientSettings to use to initialize and finish an OAuth2 Authorization and
     /// get and set the Access Token and Refresh Token for the given ClientId and Client Secret in the ApiClientSettings
     /// </summary>
     public class OAuth2Service
@@ -54,11 +54,12 @@ namespace ApiClient.OAuth2
         /// <returns>String which is the oauth2 authorization url.</returns>
         public string GenerateAuthUrl(string state = null)
         {
-            var url = string.Format("?response_type={0}&client_id={1}&redirect_uri={2}",
-                                    OAuth2Constants.ResponseTypes.CodeResponse,
-                                    ClientSettings.ClientId,
-                                    ClientSettings.RedirectUri.Replace(":", "%3A").Replace("/","%2F")
-                                    );
+            var url = string.Format(
+                "?response_type={0}&client_id={1}&redirect_uri={2}",
+                OAuth2Constants.ResponseTypes.CodeResponse,
+                ClientSettings.ClientId,
+                ClientSettings.RedirectUri.Replace(":", "%3A").Replace("/", "%2F")
+            );
             url = DigiKeyUriConstants.AuthorizationEndpoint + url;
 
             if (!string.IsNullOrWhiteSpace(state))
@@ -77,8 +78,10 @@ namespace ApiClient.OAuth2
         /// <returns>Returns OAuth2AccessToken</returns>
         public async Task<OAuth2AccessToken> FinishAuthorization(string code)
         {
-            ServicePointManager.ServerCertificateValidationCallback =
-                delegate { return true; };
+            ServicePointManager.ServerCertificateValidationCallback = delegate
+            {
+                return true;
+            };
             ServicePointManager.Expect100Continue = true;
             ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
 
@@ -86,19 +89,32 @@ namespace ApiClient.OAuth2
             var body = new List<KeyValuePair<string, string>>
             {
                 new KeyValuePair<string, string>(OAuth2Constants.Code, code),
-                new KeyValuePair<string, string>(OAuth2Constants.RedirectUri, ClientSettings.RedirectUri),
+                new KeyValuePair<string, string>(
+                    OAuth2Constants.RedirectUri,
+                    ClientSettings.RedirectUri
+                ),
                 new KeyValuePair<string, string>(OAuth2Constants.ClientId, ClientSettings.ClientId),
-                new KeyValuePair<string, string>(OAuth2Constants.ClientSecret, ClientSettings.ClientSecret),
-                new KeyValuePair<string, string>(OAuth2Constants.GrantType,
-                                                 OAuth2Constants.GrantTypes.AuthorizationCode)
+                new KeyValuePair<string, string>(
+                    OAuth2Constants.ClientSecret,
+                    ClientSettings.ClientSecret
+                ),
+                new KeyValuePair<string, string>(
+                    OAuth2Constants.GrantType,
+                    OAuth2Constants.GrantTypes.AuthorizationCode
+                )
             };
 
             // Request the token
-            var requestMessage = new HttpRequestMessage(HttpMethod.Post, DigiKeyUriConstants.TokenEndpoint);
+            var requestMessage = new HttpRequestMessage(
+                HttpMethod.Post,
+                DigiKeyUriConstants.TokenEndpoint
+            );
 
-            var httpClient = new HttpClient {BaseAddress = DigiKeyUriConstants.BaseAddress};
+            var httpClient = new HttpClient { BaseAddress = DigiKeyUriConstants.BaseAddress };
 
-            requestMessage.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            requestMessage.Headers.Accept.Add(
+                new MediaTypeWithQualityHeaderValue("application/json")
+            );
             requestMessage.Content = new FormUrlEncodedContent(body);
             Console.WriteLine("HttpRequestMessage {0}", requestMessage.RequestUri.AbsoluteUri);
             var tokenResponse = await httpClient.SendAsync(requestMessage).ConfigureAwait(false);
@@ -135,7 +151,5 @@ namespace ApiClient.OAuth2
         {
             return await OAuth2Helpers.RefreshTokenAsync(ClientSettings);
         }
-
-        
     }
 }

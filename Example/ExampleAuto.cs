@@ -78,13 +78,18 @@ namespace Example
                 else
                 {
                     SetLabel(false);
-                    var res = ESNLib.Controls.Dialog.ShowDialog(new ESNLib.Controls.Dialog.DialogConfig("Unable to get access token... Check the config and the logs", "Error")
-                    {
-                        Button1 = ESNLib.Controls.Dialog.ButtonType.Ignore,
-                        Button2 = ESNLib.Controls.Dialog.ButtonType.Custom1,
-                        CustomButton1Text = "Open log",
-                        Icon = ESNLib.Controls.Dialog.DialogIcon.Error,
-                    });
+                    var res = ESNLib.Controls.Dialog.ShowDialog(
+                        new ESNLib.Controls.Dialog.DialogConfig(
+                            "Unable to get access token... Check the config and the logs",
+                            "Error"
+                        )
+                        {
+                            Button1 = ESNLib.Controls.Dialog.ButtonType.Ignore,
+                            Button2 = ESNLib.Controls.Dialog.ButtonType.Custom1,
+                            CustomButton1Text = "Open log",
+                            Icon = ESNLib.Controls.Dialog.DialogIcon.Error,
+                        }
+                    );
                     if (res.DialogResult == ESNLib.Controls.Dialog.DialogResult.Custom1)
                     {
                         Process.Start(Logger.Instance.FileOutputPath);
@@ -150,11 +155,10 @@ namespace Example
 
         private void button1_Click(object sender, EventArgs e)
         {
-            richTextBox1.Text = @"{""StandardPricing"":[{""BreakQuantity"":1,""UnitPrice"":0.86,""TotalPrice"":0.86}],""DetailedDescription"":""1000µF 35V Aluminum Electrolytic Capacitors Radial, Can  2000 Hrs @ 105°C"",""ManufacturerPartNumber"":""ECA-1VHG102"",""DigiKeyPartNumber"":""P5555-ND"",""Manufacturer"":{""ParameterId"":-1,""ValueId"":""10"",""Parameter"":""Manufacturer"",""Value"":""Panasonic Electronic Components""}}";
-
+            richTextBox1.Text =
+                @"{""StandardPricing"":[{""BreakQuantity"":1,""UnitPrice"":0.86,""TotalPrice"":0.86}],""DetailedDescription"":""1000µF 35V Aluminum Electrolytic Capacitors Radial, Can  2000 Hrs @ 105°C"",""ManufacturerPartNumber"":""ECA-1VHG102"",""DigiKeyPartNumber"":""P5555-ND"",""Manufacturer"":{""ParameterId"":-1,""ValueId"":""10"",""Parameter"":""Manufacturer"",""Value"":""Panasonic Electronic Components""}}";
 
             DigikeyPart myPart = PartSearch.DeserializeProductDetails(richTextBox1.Text);
         }
-
     }
 }

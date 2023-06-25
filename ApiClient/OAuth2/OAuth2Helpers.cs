@@ -1,14 +1,14 @@
 //-----------------------------------------------------------------------
 //
-// THE SOFTWARE IS PROVIDED "AS IS" WITHOUT ANY WARRANTIES OF ANY KIND, EXPRESS, IMPLIED, STATUTORY, 
-// OR OTHERWISE. EXPECT TO THE EXTENT PROHIBITED BY APPLICABLE LAW, DIGI-KEY DISCLAIMS ALL WARRANTIES, 
-// INCLUDING, WITHOUT LIMITATION, ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, 
-// SATISFACTORY QUALITY, TITLE, NON-INFRINGEMENT, QUIET ENJOYMENT, 
-// AND WARRANTIES ARISING OUT OF ANY COURSE OF DEALING OR USAGE OF TRADE. 
-// 
-// DIGI-KEY DOES NOT WARRANT THAT THE SOFTWARE WILL FUNCTION AS DESCRIBED, 
+// THE SOFTWARE IS PROVIDED "AS IS" WITHOUT ANY WARRANTIES OF ANY KIND, EXPRESS, IMPLIED, STATUTORY,
+// OR OTHERWISE. EXPECT TO THE EXTENT PROHIBITED BY APPLICABLE LAW, DIGI-KEY DISCLAIMS ALL WARRANTIES,
+// INCLUDING, WITHOUT LIMITATION, ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE,
+// SATISFACTORY QUALITY, TITLE, NON-INFRINGEMENT, QUIET ENJOYMENT,
+// AND WARRANTIES ARISING OUT OF ANY COURSE OF DEALING OR USAGE OF TRADE.
+//
+// DIGI-KEY DOES NOT WARRANT THAT THE SOFTWARE WILL FUNCTION AS DESCRIBED,
 // WILL BE UNINTERRUPTED OR ERROR-FREE, OR FREE OF HARMFUL COMPONENTS.
-// 
+//
 //-----------------------------------------------------------------------
 
 using System;
@@ -65,26 +65,44 @@ namespace ApiClient.OAuth2
         /// </summary>
         /// <param name="clientSettings">ApiClientSettings needed for creating a proper refresh token HTTP post call.</param>
         /// <returns>Returns OAuth2AccessToken</returns>
-        public static async Task<OAuth2AccessToken> RefreshTokenAsync(ApiClientSettings clientSettings)
+        public static async Task<OAuth2AccessToken> RefreshTokenAsync(
+            ApiClientSettings clientSettings
+        )
         {
             var postUrl = DigiKeyUriConstants.TokenEndpoint;
             ServicePointManager.Expect100Continue = true;
             ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
 
-            var content = new FormUrlEncodedContent(new[]
-            {
-                new KeyValuePair<string, string>(OAuth2Constants.GrantType, OAuth2Constants.GrantTypes.RefreshToken),
-                new KeyValuePair<string, string>(OAuth2Constants.ClientId, clientSettings.ClientId),
-                new KeyValuePair<string, string>(OAuth2Constants.ClientSecret, clientSettings.ClientSecret),
-                new KeyValuePair<string, string>(OAuth2Constants.GrantTypes.RefreshToken, clientSettings.RefreshToken),
-            });
+            var content = new FormUrlEncodedContent(
+                new[]
+                {
+                    new KeyValuePair<string, string>(
+                        OAuth2Constants.GrantType,
+                        OAuth2Constants.GrantTypes.RefreshToken
+                    ),
+                    new KeyValuePair<string, string>(
+                        OAuth2Constants.ClientId,
+                        clientSettings.ClientId
+                    ),
+                    new KeyValuePair<string, string>(
+                        OAuth2Constants.ClientSecret,
+                        clientSettings.ClientSecret
+                    ),
+                    new KeyValuePair<string, string>(
+                        OAuth2Constants.GrantTypes.RefreshToken,
+                        clientSettings.RefreshToken
+                    ),
+                }
+            );
 
             var httpClient = new HttpClient();
 
             var response = await httpClient.PostAsync(postUrl, content);
             var responseString = await response.Content.ReadAsStringAsync();
 
-            var oAuth2AccessTokenResponse = OAuth2Helpers.ParseOAuth2AccessTokenResponse(responseString);
+            var oAuth2AccessTokenResponse = OAuth2Helpers.ParseOAuth2AccessTokenResponse(
+                responseString
+            );
 
             _log.DebugFormat("RefreshToken: " + oAuth2AccessTokenResponse);
 
@@ -103,7 +121,9 @@ namespace ApiClient.OAuth2
         {
             try
             {
-                var oAuth2AccessTokenResponse = JsonConvert.DeserializeObject<OAuth2AccessToken>(response);
+                var oAuth2AccessTokenResponse = JsonConvert.DeserializeObject<OAuth2AccessToken>(
+                    response
+                );
                 _log.DebugFormat("RefreshToken: " + oAuth2AccessTokenResponse.ToString());
                 return oAuth2AccessTokenResponse;
             }
@@ -111,7 +131,10 @@ namespace ApiClient.OAuth2
             {
                 Console.WriteLine(e.Message);
                 _log.DebugFormat($"Unable to parse OAuth2 access token response {e.Message}");
-                throw new ApiException($"Unable to parse OAuth2 access token response {e.Message}", null);
+                throw new ApiException(
+                    $"Unable to parse OAuth2 access token response {e.Message}",
+                    null
+                );
             }
         }
     }

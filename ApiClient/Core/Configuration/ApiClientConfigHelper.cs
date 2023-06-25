@@ -1,14 +1,14 @@
 //-----------------------------------------------------------------------
 //
-// THE SOFTWARE IS PROVIDED "AS IS" WITHOUT ANY WARRANTIES OF ANY KIND, EXPRESS, IMPLIED, STATUTORY, 
-// OR OTHERWISE. EXPECT TO THE EXTENT PROHIBITED BY APPLICABLE LAW, DIGI-KEY DISCLAIMS ALL WARRANTIES, 
-// INCLUDING, WITHOUT LIMITATION, ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, 
-// SATISFACTORY QUALITY, TITLE, NON-INFRINGEMENT, QUIET ENJOYMENT, 
-// AND WARRANTIES ARISING OUT OF ANY COURSE OF DEALING OR USAGE OF TRADE. 
-// 
-// DIGI-KEY DOES NOT WARRANT THAT THE SOFTWARE WILL FUNCTION AS DESCRIBED, 
+// THE SOFTWARE IS PROVIDED "AS IS" WITHOUT ANY WARRANTIES OF ANY KIND, EXPRESS, IMPLIED, STATUTORY,
+// OR OTHERWISE. EXPECT TO THE EXTENT PROHIBITED BY APPLICABLE LAW, DIGI-KEY DISCLAIMS ALL WARRANTIES,
+// INCLUDING, WITHOUT LIMITATION, ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE,
+// SATISFACTORY QUALITY, TITLE, NON-INFRINGEMENT, QUIET ENJOYMENT,
+// AND WARRANTIES ARISING OUT OF ANY COURSE OF DEALING OR USAGE OF TRADE.
+//
+// DIGI-KEY DOES NOT WARRANT THAT THE SOFTWARE WILL FUNCTION AS DESCRIBED,
 // WILL BE UNINTERRUPTED OR ERROR-FREE, OR FREE OF HARMFUL COMPONENTS.
-// 
+//
 //-----------------------------------------------------------------------
 
 using System;
@@ -23,7 +23,7 @@ namespace ApiClient.Core.Configuration
 {
     public class ApiClientConfigHelper : ConfigurationHelper, IApiClientConfigHelper
     {
-        // Static members are 'eagerly initialized', that is, 
+        // Static members are 'eagerly initialized', that is,
         // immediately when class is loaded for the first time.
         // .NET guarantees thread safety for static initialization
         private static readonly ApiClientConfigHelper _thisInstance = new ApiClientConfigHelper();
@@ -48,12 +48,14 @@ namespace ApiClient.Core.Configuration
 
                 // This little hack is ugly but needed to work with Console apps and Asp.Net apps.
                 var solutionDir = Regex.IsMatch(baseDir, regexPattern)
-                    ? Directory.GetParent(baseDir).Parent.Parent   // Console Apps
-                    : Directory.GetParent(baseDir);    // Asp.Net apps
+                    ? Directory.GetParent(baseDir).Parent.Parent // Console Apps
+                    : Directory.GetParent(baseDir); // Asp.Net apps
 
                 if (!File.Exists(Path.Combine(solutionDir.FullName, "apiclient.config")))
                 {
-                    throw new ApiException($"Unable to locate apiclient.config in solution folder {solutionDir.FullName}");
+                    throw new ApiException(
+                        $"Unable to locate apiclient.config in solution folder {solutionDir.FullName}"
+                    );
                 }
 
                 var map = new ExeConfigurationFileMap
@@ -61,11 +63,16 @@ namespace ApiClient.Core.Configuration
                     ExeConfigFilename = Path.Combine(solutionDir.FullName, "apiclient.config"),
                 };
                 Console.WriteLine($"map.ExeConfigFilename {map.ExeConfigFilename}");
-                _config = ConfigurationManager.OpenMappedExeConfiguration(map, ConfigurationUserLevel.None);
+                _config = ConfigurationManager.OpenMappedExeConfiguration(
+                    map,
+                    ConfigurationUserLevel.None
+                );
             }
             catch (System.Exception ex)
             {
-                throw new ApiException($"Error in ApiClientConfigHelper on opening up apiclient.config {ex.Message}");
+                throw new ApiException(
+                    $"Error in ApiClientConfigHelper on opening up apiclient.config {ex.Message}"
+                );
             }
         }
 

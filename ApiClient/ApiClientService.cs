@@ -1,14 +1,14 @@
 //-----------------------------------------------------------------------
 //
-// THE SOFTWARE IS PROVIDED "AS IS" WITHOUT ANY WARRANTIES OF ANY KIND, EXPRESS, IMPLIED, STATUTORY, 
-// OR OTHERWISE. EXPECT TO THE EXTENT PROHIBITED BY APPLICABLE LAW, DIGI-KEY DISCLAIMS ALL WARRANTIES, 
-// INCLUDING, WITHOUT LIMITATION, ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, 
-// SATISFACTORY QUALITY, TITLE, NON-INFRINGEMENT, QUIET ENJOYMENT, 
-// AND WARRANTIES ARISING OUT OF ANY COURSE OF DEALING OR USAGE OF TRADE. 
-// 
-// DIGI-KEY DOES NOT WARRANT THAT THE SOFTWARE WILL FUNCTION AS DESCRIBED, 
+// THE SOFTWARE IS PROVIDED "AS IS" WITHOUT ANY WARRANTIES OF ANY KIND, EXPRESS, IMPLIED, STATUTORY,
+// OR OTHERWISE. EXPECT TO THE EXTENT PROHIBITED BY APPLICABLE LAW, DIGI-KEY DISCLAIMS ALL WARRANTIES,
+// INCLUDING, WITHOUT LIMITATION, ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE,
+// SATISFACTORY QUALITY, TITLE, NON-INFRINGEMENT, QUIET ENJOYMENT,
+// AND WARRANTIES ARISING OUT OF ANY COURSE OF DEALING OR USAGE OF TRADE.
+//
+// DIGI-KEY DOES NOT WARRANT THAT THE SOFTWARE WILL FUNCTION AS DESCRIBED,
 // WILL BE UNINTERRUPTED OR ERROR-FREE, OR FREE OF HARMFUL COMPONENTS.
-// 
+//
 //-----------------------------------------------------------------------
 
 using System;
@@ -46,7 +46,8 @@ namespace ApiClient
 
         public ApiClientService(ApiClientSettings clientSettings)
         {
-            ClientSettings = clientSettings ?? throw new ArgumentNullException(nameof(clientSettings));
+            ClientSettings =
+                clientSettings ?? throw new ArgumentNullException(nameof(clientSettings));
             Initialize();
         }
 
@@ -56,7 +57,10 @@ namespace ApiClient
 
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
-            var authenticationHeaderValue = new AuthenticationHeaderValue("Bearer", ClientSettings.AccessToken);
+            var authenticationHeaderValue = new AuthenticationHeaderValue(
+                "Bearer",
+                ClientSettings.AccessToken
+            );
             HttpClient.DefaultRequestHeaders.Authorization = authenticationHeaderValue;
 
             HttpClient.DefaultRequestHeaders.Add("X-Digikey-Client-Id", ClientSettings.ClientId);
@@ -64,30 +68,40 @@ namespace ApiClient
             HttpClient.DefaultRequestHeaders.Add("X-DIGIKEY-Locale-Language", "en");
             HttpClient.DefaultRequestHeaders.Add("X-DIGIKEY-Locale-Currency", "CHF");
             HttpClient.BaseAddress = DigiKeyUriConstants.BaseAddress;
-            HttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            HttpClient.DefaultRequestHeaders.Accept.Add(
+                new MediaTypeWithQualityHeaderValue("application/json")
+            );
         }
 
         public async Task ResetExpiredAccessTokenIfNeeded()
         {
-            if (_clientSettings.ExpirationDateTime < DateTime.Now && _clientSettings.RefreshToken != null)
+            if (
+                _clientSettings.ExpirationDateTime < DateTime.Now
+                && _clientSettings.RefreshToken != null
+            )
             {
                 // Let's refresh the token
                 var oAuth2Service = new OAuth2Service(_clientSettings);
                 var oAuth2AccessToken = await oAuth2Service.RefreshTokenAsync();
                 if (oAuth2AccessToken.IsError)
                 {
-                    // Current Refresh token is invalid or expired 
+                    // Current Refresh token is invalid or expired
                     Console.WriteLine("Current Refresh token is invalid or expired ");
                     return;
                 }
 
                 // Update the clientSettings
                 _clientSettings.UpdateAndSave(oAuth2AccessToken);
-                Console.WriteLine("ApiClientService::CheckifAccessTokenIsExpired() call to refresh");
+                Console.WriteLine(
+                    "ApiClientService::CheckifAccessTokenIsExpired() call to refresh"
+                );
                 Console.WriteLine(_clientSettings.ToString());
 
                 // Reset the Authorization header value with the new access token.
-                var authenticationHeaderValue = new AuthenticationHeaderValue("Bearer", _clientSettings.AccessToken);
+                var authenticationHeaderValue = new AuthenticationHeaderValue(
+                    "Bearer",
+                    _clientSettings.AccessToken
+                );
                 HttpClient.DefaultRequestHeaders.Authorization = authenticationHeaderValue;
             }
         }
@@ -96,11 +110,7 @@ namespace ApiClient
         {
             var resourcePath = "/Search/v3/Products/Keyword";
 
-            var request = new KeywordSearchRequest
-            {
-                Keywords = keyword,
-                RecordCount = 25
-            };
+            var request = new KeywordSearchRequest { Keywords = keyword, RecordCount = 25 };
 
             await ResetExpiredAccessTokenIfNeeded();
             var postResponse = await PostAsJsonAsync(resourcePath, request);
@@ -139,7 +149,8 @@ namespace ApiClient
                     if (OAuth2Helpers.IsTokenStale(responseBody))
                     {
                         _log.DebugFormat(
-                            $"Stale access token detected ({_clientSettings.AccessToken}. Calling RefreshTokenAsync to refresh it");
+                            $"Stale access token detected ({_clientSettings.AccessToken}. Calling RefreshTokenAsync to refresh it"
+                        );
                         await OAuth2Helpers.RefreshTokenAsync(_clientSettings);
                         _log.DebugFormat($"New Access token is {_clientSettings.AccessToken}");
 
@@ -148,12 +159,17 @@ namespace ApiClient
                         {
                             HttpClient.DefaultRequestHeaders.Add(CustomHeader, CustomHeader);
                             HttpClient.DefaultRequestHeaders.Authorization =
-                                new AuthenticationHeaderValue("Authorization", _clientSettings.AccessToken);
+                                new AuthenticationHeaderValue(
+                                    "Authorization",
+                                    _clientSettings.AccessToken
+                                );
                             return await GetAsync(resourcePath);
                         }
                         else if (response.RequestMessage.Headers.Contains(CustomHeader))
                         {
-                            throw new ApiException($"Inside method {nameof(PostAsJsonAsync)} we received an unexpected stale token response - during the retry for a call whose token we just refreshed {response.StatusCode}");
+                            throw new ApiException(
+                                $"Inside method {nameof(PostAsJsonAsync)} we received an unexpected stale token response - during the retry for a call whose token we just refreshed {response.StatusCode}"
+                            );
                         }
                     }
                 }
@@ -172,7 +188,10 @@ namespace ApiClient
             }
         }
 
-        public async Task<HttpResponseMessage> PostAsJsonAsync<T>(string resourcePath, T postRequest)
+        public async Task<HttpResponseMessage> PostAsJsonAsync<T>(
+            string resourcePath,
+            T postRequest
+        )
         {
             _log.DebugFormat(">ApiClientService::PostAsJsonAsync()");
             try
@@ -188,7 +207,8 @@ namespace ApiClient
                     if (OAuth2Helpers.IsTokenStale(responseBody))
                     {
                         _log.DebugFormat(
-                            $"Stale access token detected ({_clientSettings.AccessToken}. Calling RefreshTokenAsync to refresh it");
+                            $"Stale access token detected ({_clientSettings.AccessToken}. Calling RefreshTokenAsync to refresh it"
+                        );
                         await OAuth2Helpers.RefreshTokenAsync(_clientSettings);
                         _log.DebugFormat($"New Access token is {_clientSettings.AccessToken}");
 
@@ -197,12 +217,17 @@ namespace ApiClient
                         {
                             HttpClient.DefaultRequestHeaders.Add(CustomHeader, CustomHeader);
                             HttpClient.DefaultRequestHeaders.Authorization =
-                                new AuthenticationHeaderValue("Authorization", _clientSettings.AccessToken);
+                                new AuthenticationHeaderValue(
+                                    "Authorization",
+                                    _clientSettings.AccessToken
+                                );
                             return await PostAsJsonAsync(resourcePath, postRequest);
                         }
                         else if (response.RequestMessage.Headers.Contains(CustomHeader))
                         {
-                            throw new ApiException($"Inside method {nameof(PostAsJsonAsync)} we received an unexpected stale token response - during the retry for a call whose token we just refreshed {response.StatusCode}");
+                            throw new ApiException(
+                                $"Inside method {nameof(PostAsJsonAsync)} we received an unexpected stale token response - during the retry for a call whose token we just refreshed {response.StatusCode}"
+                            );
                         }
                     }
                 }

@@ -21,7 +21,10 @@
         public string ManufacturerPartNumber { get; set; }
         public string DigiKeyPartNumber { get; set; }
         public DigikeyManufacturer Manufacturer { get; set; }
-        public string ManufacturerString { get => Manufacturer ?? string.Empty; }
+        public string ManufacturerString
+        {
+            get => Manufacturer ?? string.Empty;
+        }
 
         public class DigikeyStandardPricing
         {
