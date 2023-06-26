@@ -13,9 +13,12 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Text;
+using System.Xml.Linq;
 using ApiClient.Core.Configuration;
 using ApiClient.OAuth2.Models;
+using ESNLib.Tools;
 
 namespace ApiClient.Models
 {
@@ -29,39 +32,61 @@ namespace ApiClient.Models
         public string RefreshToken { get; set; }
         public DateTime ExpirationDateTime { get; set; }
 
-        private static ApiClientSettings _instance = CreateFromConfigFile();
+        private static ApiClientSettings _instance;
 
+        /// <summary>
+        /// The name of your application. Define 
+        /// </summary>
+        public static string FilePath { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Set the default file path at %AppData%/Roaming/<paramref name="manufacturer"/>/<paramref name="appName"/>/Settings/digikey_api_config.txt
+        /// </summary>
+        /// <param name="appName">Name of your application</param>
+        public static void SetFilePath(string manufacturer, string appName)
+        {
+            FilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), manufacturer, appName, "Settings", "digikey_api_config.txt");
+        }
+
+        /// <summary>
+        /// Get the instance of the setting class. Set <see cref="FilePath"/> before
+        /// </summary>
+        /// <returns></returns>
         public static ApiClientSettings GetInstance()
         {
+            if (_instance == null)
+            {
+                _instance = CreateFromConfigFile();
+            }
             return _instance;
         }
 
+        /// <summary>
+        /// Save to <see cref="FilePath"/>
+        /// </summary>
         public void Save()
         {
-            var t = ApiClientConfigHelper.Instance();
-            t.ClientId = ClientId;
-            t.ClientSecret = ClientSecret;
-            t.RedirectUri = RedirectUri;
-            t.ListenUri = ListenUri;
-            t.AccessToken = AccessToken;
-            t.RefreshToken = RefreshToken;
-            t.ExpirationDateTime = ExpirationDateTime;
-            t.Save();
+            SettingsManager.SaveTo(FilePath, this, false, true, false);
         }
 
+        /// <summary>
+        /// Load from the <see cref="FilePath"/>
+        /// </summary>
         private static ApiClientSettings CreateFromConfigFile()
         {
-            var t = ApiClientConfigHelper.Instance();
-            return new ApiClientSettings()
+            if (string.IsNullOrEmpty(FilePath))
             {
-                ClientId = t.ClientId,
-                ClientSecret = t.ClientSecret,
-                RedirectUri = t.RedirectUri,
-                ListenUri = t.ListenUri,
-                AccessToken = t.AccessToken,
-                RefreshToken = t.RefreshToken,
-                ExpirationDateTime = t.ExpirationDateTime,
-            };
+                return null;
+            }
+
+            if (!SettingsManager.LoadFromDefault(FilePath, out ApiClientSettings setting))
+            {
+                // No data found, create empty one
+                ApiClientSettings acs = new ApiClientSettings();
+                acs.Save();
+                return acs;
+            }
+            return setting;
         }
 
         public void UpdateAndSave(OAuth2AccessToken oAuth2AccessToken)

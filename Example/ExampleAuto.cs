@@ -20,12 +20,15 @@ namespace Example
 {
     public partial class ExampleAuto : Form, AdminTools.IAdminForm
     {
-        private ApiClientService service = new ApiClientService(ApiClientSettings.GetInstance());
+        private ApiClientService service;
 
         public ExampleAuto()
         {
             InitializeComponent();
             Logger.Instance.Write("Application idle...");
+
+            ApiClientSettings.SetFilePath("ESN", "ApiClientWrapper");
+            service = new ApiClientService(ApiClientSettings.GetInstance());
 
 #if DEBUG
             Process.Start(Logger.Instance.FileOutputPath);
@@ -58,6 +61,13 @@ namespace Example
 
         private async void GetAccess()
         {
+            // Verify listen uri, redirect uri
+            if (string.IsNullOrEmpty(ApiClientSettings.GetInstance().ListenUri)
+                || string.IsNullOrEmpty(ApiClientSettings.GetInstance().RedirectUri))
+            {
+                return;
+            }
+
             var client = new ApiClientWrapper();
             var result = await client.GetAccess();
 

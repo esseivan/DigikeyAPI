@@ -16,6 +16,7 @@
 	<PackageId>DigikeyApiWrapper</PackageId>
 	<Title>Digikey API Wrapper</Title>
 	<IncludeSymbols>True</IncludeSymbols>
+	<GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
