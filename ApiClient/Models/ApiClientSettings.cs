@@ -66,7 +66,7 @@ namespace ApiClient.Models
         /// </summary>
         public void Save()
         {
-            SettingsManager.SaveTo(FilePath, this, false, true, false);
+            SettingsManager.SaveTo(FilePath, this, SettingsManager.BackupMode.None, true, false, false);
         }
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace ApiClient.Models
                 return null;
             }
 
-            if (!SettingsManager.LoadFromDefault(FilePath, out ApiClientSettings setting))
+            if (!SettingsManager.LoadFrom(FilePath, out ApiClientSettings setting, false))
             {
                 // No data found, create empty one
                 ApiClientSettings acs = new ApiClientSettings();
