@@ -16,6 +16,7 @@
 		<PackageId>DigikeyApiClient</PackageId>
 		<Title>Digikey API Client</Title>
 		<IncludeSymbols>True</IncludeSymbols>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 	</PropertyGroup>
 
 	<ItemGroup>

@@ -15,6 +15,7 @@ namespace ApiClient.Tests
         [TestMethod()]
         public void RefreshAccessTokenTest_Valid()
         {
+            ApiClientSettings.SetFilePath("ESN", "ApiClientWrapperUnitTests");
             // Clear settings
             (ApiClientSettings.GetInstance()).ClearAndSave();
 
