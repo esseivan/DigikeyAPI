@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Security.Principal;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 
@@ -41,7 +42,7 @@ namespace ApiClient
             Write("Getting API Access...");
             var setting = ApiClientSettings.GetInstance();
             bool isExpired =
-                (setting.ExpirationDateTime < DateTime.Now) || (setting.RefreshToken == null);
+                (setting.ExpirationDateTime < DateTime.Now) || (string.IsNullOrEmpty(setting.RefreshToken));
 
             // Refresh token still valid. Nothing to do
             if (!isExpired)
@@ -52,7 +53,7 @@ namespace ApiClient
             Write("Token expired. Retrieving new tokens...");
             // No valid token, try refreshing
             var taskResult = RefreshAccessToken();
-            if (await Task.WhenAny(taskResult, Task.Delay(TimeoutSeconds*1000)) != taskResult)
+            if (await Task.WhenAny(taskResult, Task.Delay(TimeoutSeconds * 1000)) != taskResult)
             {
                 Write("Token refresh timeout", Logger.LogLevels.Error);
                 // timeout logic
@@ -75,7 +76,7 @@ namespace ApiClient
             {
                 Write("Token access timeout", Logger.LogLevels.Error);
                 // timeout
-                return null;
+                return new AccessResult(false);
             }
             success = taskResult.Result;
             if (success)
@@ -101,11 +102,8 @@ namespace ApiClient
             var _clientSettings = ApiClientSettings.GetInstance();
 
             // Validate URL
-            bool isValid =
-                Uri.TryCreate(_clientSettings.ListenUri, UriKind.Absolute, out Uri uriResult)
-                && (
-                    uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps
-                );
+            Regex urlRegex = new Regex("((([A-Za-z]{3,9}:(?:\\/\\/)?)(?:[-;:&=\\+\\$,\\w]+@)?[A-Za-z0-9+.-]+(:[0-9]+)?|(?:www.|[-;:&=\\+\\$,\\w]+@)[A-Za-z0-9.-]+)((?:\\/[\\+~%\\/.\\w\\-_]*)?\\??(?:[-\\+=&;%@.\\w_]*)#?(?:[\\w]*))?)");
+            bool isValid = urlRegex.Match(_clientSettings.ListenUri).Success;
             if (!isValid)
             {
                 Write("Listen URI invalid...", Logger.LogLevels.Error);
