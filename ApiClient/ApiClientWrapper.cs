@@ -52,7 +52,7 @@ namespace ApiClient
             Write("Token expired. Retrieving new tokens...");
             // No valid token, try refreshing
             var taskResult = RefreshAccessToken();
-            if (await Task.WhenAny(taskResult, Task.Delay(TimeoutSeconds)) != taskResult)
+            if (await Task.WhenAny(taskResult, Task.Delay(TimeoutSeconds*1000)) != taskResult)
             {
                 Write("Token refresh timeout", Logger.LogLevels.Error);
                 // timeout logic
@@ -71,7 +71,7 @@ namespace ApiClient
 
             // No refresh made. Get access and refresh token...
             taskResult = GetAccessToken();
-            if (await Task.WhenAny(taskResult, Task.Delay(TimeoutSeconds)) != taskResult)
+            if (await Task.WhenAny(taskResult, Task.Delay(TimeoutSeconds * 1000)) != taskResult)
             {
                 Write("Token access timeout", Logger.LogLevels.Error);
                 // timeout
