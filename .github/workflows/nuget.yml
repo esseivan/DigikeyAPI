@@ -31,8 +31,8 @@ jobs:
 
     - name: 'Pack project'
       run: |
-        dotnet pack ${{ env.PROJECT_PATH_WRA }} --no-restore --no-build --configuration Release --include-symbols -p:PackageVersion=${{ steps.version.outputs.version-without-v }} -p:SymbolPackageFormat=snupkg --output ${{ env.PACKAGE_OUTPUT_DIRECTORY }}
-        dotnet pack ${{ env.PROJECT_PATH_CLI }} --no-restore --no-build --configuration Release --include-symbols -p:PackageVersion=${{ steps.version.outputs.version-without-v }} -p:SymbolPackageFormat=snupkg --output ${{ env.PACKAGE_OUTPUT_DIRECTORY }}
+        dotnet pack ${{ env.PROJECT_PATH_WRA }} --no-restore --no-build --configuration Release --include-source -p:PackageVersion=${{ steps.version.outputs.version-without-v }} -p:SymbolPackageFormat=snupkg --output ${{ env.PACKAGE_OUTPUT_DIRECTORY }}
+        dotnet pack ${{ env.PROJECT_PATH_CLI }} --no-restore --no-build --configuration Release --include-source -p:PackageVersion=${{ steps.version.outputs.version-without-v }} -p:SymbolPackageFormat=snupkg --output ${{ env.PACKAGE_OUTPUT_DIRECTORY }}
 
     - name: 'Push package'
       run: dotnet nuget push ${{ env.PACKAGE_OUTPUT_DIRECTORY }}\*.nupkg -k ${{ secrets.NUGET_AUTH_TOKEN }} -s ${{ env.NUGET_SOURCE_URL }}
