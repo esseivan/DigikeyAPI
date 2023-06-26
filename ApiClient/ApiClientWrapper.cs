@@ -38,6 +38,7 @@ namespace ApiClient
 
         public async Task<AccessResult> GetAccess()
         {
+            Write("Getting API Access...");
             var setting = ApiClientSettings.GetInstance();
             bool isExpired =
                 (setting.ExpirationDateTime < DateTime.Now) || (setting.RefreshToken == null);
@@ -45,39 +46,47 @@ namespace ApiClient
             // Refresh token still valid. Nothing to do
             if (!isExpired)
             {
+                Write("Token not expired. Finished.");
                 return new AccessResult(true);
             }
+            Write("Token expired. Retrieving new tokens...");
             // No valid token, try refreshing
             var taskResult = RefreshAccessToken();
             if (await Task.WhenAny(taskResult, Task.Delay(TimeoutSeconds)) != taskResult)
             {
+                Write("Token refresh timeout", Logger.LogLevels.Error);
                 // timeout logic
                 return new AccessResult(false);
             }
             var success = taskResult.Result;
             if (success)
             {
+                Write("Token refresh success");
                 return new AccessResult(
                     true,
                     new ApiClientService(ApiClientSettings.GetInstance())
                 );
             }
+            Write("Token refresh failed. Getting base access...");
 
             // No refresh made. Get access and refresh token...
             taskResult = GetAccessToken();
             if (await Task.WhenAny(taskResult, Task.Delay(TimeoutSeconds)) != taskResult)
             {
+                Write("Token access timeout", Logger.LogLevels.Error);
                 // timeout
                 return null;
             }
             success = taskResult.Result;
             if (success)
             {
+                Write("Token access success");
                 return new AccessResult(
                     true,
                     new ApiClientService(ApiClientSettings.GetInstance())
                 );
             }
+            Write("Token access failed...");
 
             // Unable to retrieve access token. Return false
             return new AccessResult(false);
@@ -102,6 +111,7 @@ namespace ApiClient
                 Write("Listen URI invalid...", Logger.LogLevels.Error);
                 return false;
             }
+            Write("Listen URI valid");
 
             // start up a HttpListener for the callback(RedirectUri) from the OAuth2 server
             HttpListenerContext context;
@@ -205,7 +215,7 @@ namespace ApiClient
             // Check if you got an error during finishing the OAuth2 authorization
             if (result.AccessToken == null)
             {
-                Write("Failed", Logger.LogLevels.Error);
+                Write("Unable to refresh...", Logger.LogLevels.Error);
                 return false;
             }
             else
